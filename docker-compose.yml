@@ -1,0 +1,32 @@
+version: '3.1'
+# volumes:
+#     db:
+#         driver: local
+    
+
+services:
+  # db:
+  #   image: postgres:16
+  #   restart: always
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     LANG: "en_PH"
+  #     LANGUAGE: "en_PH"
+  #     TZ: "Asia/Manila"
+  #     POSTGRES_DB: bansayDB
+  #     POSTGRES_USER: bansay
+  #     POSTGRES_ROOT_PASSWORD: password
+  #     POSTGRES_ROOT_HOST: '%'
+  #   volumes:
+  #     - db:/var/lib/postgresql/data
+  gateway:
+    image: bansay/gateway
+    restart: always
+    ports:
+      - 3000:3000
+  user:
+    image: bansay/user-service
+    restart: always
+    ports:
+      - 3001:3001
