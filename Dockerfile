@@ -11,7 +11,10 @@ RUN yarn
 # RUN npm ci --only=production
 # Bundle app source
 COPY . .
+
+RUN yarn build
+
 RUN rm -r src
 
 EXPOSE 3000
-CMD [ "node", "dist/src/main" ]
+CMD [ "node", "dist/main" ]

@@ -21,12 +21,16 @@ services:
   #   volumes:
   #     - db:/var/lib/postgresql/data
   gateway:
-    image: bansay/gateway
+    build: .
+    image: bansay/gateway:local
     restart: always
     ports:
       - 3000:3000
+    environment:
+      - USER_SERVICE_HOST=user
   user:
-    image: bansay/user-service
+    build: ../bansay-user-service
+    image: bansay/user-service:local
     restart: always
     ports:
       - 3001:3001
