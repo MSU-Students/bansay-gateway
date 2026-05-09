@@ -28,9 +28,12 @@ services:
       - 3000:3000
     environment:
       - USER_SERVICE_HOST=user
+      - LIABILITY_SERVICE_HOST=liability
   user:
     build: ../bansay-user-service
     image: bansay/user-service:local
     restart: always
-    ports:
-      - 3001:3001
+  liability:
+    build: ../bansay-liability-service
+    image: bansay/liability-service:local
+    restart: always
