@@ -29,6 +29,7 @@ services:
     environment:
       - USER_SERVICE_HOST=user
       - LIABILITY_SERVICE_HOST=liability
+      - ATTENDANCE_SERVICE_HOST=attendance
   user:
     build: ../bansay-user-service
     image: bansay/user-service:local
@@ -36,4 +37,8 @@ services:
   liability:
     build: ../bansay-liability-service
     image: bansay/liability-service:local
+    restart: always
+  attendance:
+    build: ../bansay-attendance-service
+    image: bansay/attendance-service:local
     restart: always
