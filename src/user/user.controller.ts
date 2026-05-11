@@ -10,4 +10,9 @@ export class UserController {
   async ping() {
     return this.userService.ping();
   }
+
+  @Get('error-test')
+  async testError() {
+    return this.userService.testError();
+  }
 }

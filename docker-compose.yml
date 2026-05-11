@@ -1,25 +1,4 @@
-version: '3.1'
-# volumes:
-#     db:
-#         driver: local
-    
-
 services:
-  # db:
-  #   image: postgres:16
-  #   restart: always
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     LANG: "en_PH"
-  #     LANGUAGE: "en_PH"
-  #     TZ: "Asia/Manila"
-  #     POSTGRES_DB: bansayDB
-  #     POSTGRES_USER: bansay
-  #     POSTGRES_ROOT_PASSWORD: password
-  #     POSTGRES_ROOT_HOST: '%'
-  #   volumes:
-  #     - db:/var/lib/postgresql/data
   gateway:
     build: .
     image: bansay/gateway:local
@@ -30,15 +9,69 @@ services:
       - USER_SERVICE_HOST=user
       - LIABILITY_SERVICE_HOST=liability
       - ATTENDANCE_SERVICE_HOST=attendance
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - bansay-network
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/user/ping', (res) => res.statusCode === 200 ? process.exit(0) : process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - bansay-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   user:
     build: ../bansay-user-service
     image: bansay/user-service:local
     restart: always
+    networks:
+      - bansay-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('net').connect(3001, 'localhost').on('error', () => process.exit(1)).on('connect', () => process.exit(0))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   liability:
     build: ../bansay-liability-service
     image: bansay/liability-service:local
     restart: always
+    networks:
+      - bansay-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('net').connect(3002, 'localhost').on('error', () => process.exit(1)).on('connect', () => process.exit(0))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   attendance:
     build: ../bansay-attendance-service
     image: bansay/attendance-service:local
     restart: always
+    networks:
+      - bansay-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('net').connect(3000, 'localhost').on('error', () => process.exit(1)).on('connect', () => process.exit(0))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  bansay-network:
+    driver: bridge
