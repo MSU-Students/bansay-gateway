@@ -8,4 +8,8 @@ export class UserService {
   ping() {
     return this.client.send({ cmd: 'user.ping' }, {});
   }
+
+  testError() {
+    return this.client.send({ cmd: 'user.error' }, {});
+  }
 }
