@@ -16,6 +16,7 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - db:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
 
   gateway:
     build: .
@@ -45,6 +46,14 @@ services:
     build: ../bansay-liability-service
     image: bansay/liability-service:local
     restart: always
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DATABASE_NAME=bansay_liability_db
+    depends_on:
+      - db
 
   attendance:
     build: ../bansay-attendance-service
