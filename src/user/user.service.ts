@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -20,5 +21,9 @@ export class UserService {
 
   findById(id: number) {
     return this.client.send({ cmd: 'user.findById' }, { id });
+  }
+
+  update(id: number, dto: UpdateUserDto) {
+    return this.client.send({ cmd: 'user.update' }, { id, dto });
   }
 }
