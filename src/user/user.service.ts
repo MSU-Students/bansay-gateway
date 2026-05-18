@@ -13,4 +13,12 @@ export class UserService {
   create(dto: CreateUserDto) {
     return this.client.send({ cmd: 'user.create' }, dto);
   }
+
+  findAll() {
+    return this.client.send({ cmd: 'user.findAll' }, {});
+  }
+
+  findById(id: number) {
+    return this.client.send({ cmd: 'user.findById' }, { id });
+  }
 }
