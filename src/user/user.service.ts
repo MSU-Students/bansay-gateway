@@ -26,4 +26,8 @@ export class UserService {
   update(id: number, dto: UpdateUserDto) {
     return this.client.send({ cmd: 'user.update' }, { id, dto });
   }
+
+  remove(id: number) {
+    return this.client.send({ cmd: 'user.remove' }, { id });
+  }
 }
