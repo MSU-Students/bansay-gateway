@@ -11,6 +11,7 @@ import { AttendanceService } from './attendance.service';
         transport: Transport.TCP,
         options: {
           host: process.env.ATTENDANCE_SERVICE_HOST || 'localhost',
+          port: 3003,
         },
       },
     ]),
