@@ -3,6 +3,8 @@ import { LiabilityService } from './liability.service';
 import { CreateLiabilityDto } from './dto/create-liability.dto';
 import { UpdateLiabilityDto } from './dto/update-liability.dto';
 import { QueryLiabilityDto } from './dto/query-liability.dto';
+import { CreateAppealDto } from './dto/create-appeal.dto';
+import { ReviewAppealDto } from './dto/review-appeal.dto';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('Liability')
@@ -44,5 +46,39 @@ export class LiabilityController {
   @ApiOperation({ summary: 'Delete a liability' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.liabilityService.remove(id);
+  }
+
+  @Post(':id/appeals')
+  @ApiOperation({ summary: 'Submit an appeal for a liability' })
+  createAppeal(@Param('id', ParseIntPipe) id: number, @Body() dto: CreateAppealDto) {
+    return this.liabilityService.createAppeal({ ...dto, liabilityId: id });
+  }
+}
+
+@ApiTags('Appeal')
+@Controller('appeals')
+export class AppealController {
+  constructor(private readonly liabilityService: LiabilityService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'List all appeals' })
+  findAll() {
+    return this.liabilityService.listAppeals();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get an appeal by ID' })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.liabilityService.findAppeal(id);
+  }
+
+  @Patch(':id/review')
+  @ApiOperation({ summary: 'Review an appeal (approve/reject)' })
+  review(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: ReviewAppealDto,
+  ) {
+    const reviewedBy = 1;
+    return this.liabilityService.reviewAppeal(id, reviewedBy, dto);
   }
 }
