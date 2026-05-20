@@ -3,6 +3,8 @@ import { ClientProxy } from '@nestjs/microservices';
 import { CreateLiabilityDto } from './dto/create-liability.dto';
 import { UpdateLiabilityDto } from './dto/update-liability.dto';
 import { QueryLiabilityDto } from './dto/query-liability.dto';
+import { CreateAppealDto } from './dto/create-appeal.dto';
+import { ReviewAppealDto } from './dto/review-appeal.dto';
 
 @Injectable()
 export class LiabilityService {
@@ -30,5 +32,25 @@ export class LiabilityService {
 
   remove(id: number) {
     return this.client.send({ cmd: 'liability.remove' }, { id });
+  }
+
+  createAppeal(dto: CreateAppealDto) {
+    return this.client.send({ cmd: 'liability.createAppeal' }, dto);
+  }
+
+  reviewAppeal(id: number, reviewedBy: number, dto: ReviewAppealDto) {
+    return this.client.send({ cmd: 'liability.reviewAppeal' }, { id, reviewedBy, ...dto });
+  }
+
+  findAppealsByLiability(liabilityId: number) {
+    return this.client.send({ cmd: 'liability.findAppealsByLiability' }, { liabilityId });
+  }
+
+  findAppeal(id: number) {
+    return this.client.send({ cmd: 'liability.findAppeal' }, { id });
+  }
+
+  listAppeals() {
+    return this.client.send({ cmd: 'liability.listAppeals' }, {});
   }
 }
