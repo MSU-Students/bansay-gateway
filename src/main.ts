@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Bansay')
     .setDescription('Liability ...')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
