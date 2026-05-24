@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { CreateLiabilityDto } from './dto/create-liability.dto';
 import { UpdateLiabilityDto } from './dto/update-liability.dto';
 import { QueryLiabilityDto } from './dto/query-liability.dto';
+import { CreatePaymentDto } from './dto/create-payment.dto';
 
 @Injectable()
 export class LiabilityService {
@@ -30,5 +31,21 @@ export class LiabilityService {
 
   remove(id: number) {
     return this.client.send({ cmd: 'liability.remove' }, { id });
+  }
+
+  createPayment(dto: CreatePaymentDto) {
+    return this.client.send({ cmd: 'liability.createPayment' }, dto);
+  }
+
+  findPaymentsByLiability(liabilityId: number) {
+    return this.client.send({ cmd: 'liability.findPaymentsByLiability' }, { liabilityId });
+  }
+
+  findPayment(id: number) {
+    return this.client.send({ cmd: 'liability.findPayment' }, { id });
+  }
+
+  listPayments() {
+    return this.client.send({ cmd: 'liability.listPayments' }, {});
   }
 }
