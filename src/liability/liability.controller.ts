@@ -4,12 +4,14 @@ import { CreateLiabilityDto } from './dto/create-liability.dto';
 import { UpdateLiabilityDto } from './dto/update-liability.dto';
 import { QueryLiabilityDto } from './dto/query-liability.dto';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Public } from '../auth/decorators/is-public.decorator';
 
 @ApiTags('Liability')
 @Controller('liability')
 export class LiabilityController {
   constructor(private readonly liabilityService: LiabilityService) {}
 
+  @Public()
   @Get('ping')
   @ApiOperation({ summary: 'Health check for liability service' })
   ping() {
