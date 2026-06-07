@@ -5,6 +5,7 @@ import { UpdateLiabilityDto } from './dto/update-liability.dto';
 import { QueryLiabilityDto } from './dto/query-liability.dto';
 import { CreateAppealDto } from './dto/create-appeal.dto';
 import { ReviewAppealDto } from './dto/review-appeal.dto';
+import { CreatePaymentDto } from './dto/create-payment.dto';
 
 @Injectable()
 export class LiabilityService {
@@ -52,5 +53,21 @@ export class LiabilityService {
 
   listAppeals() {
     return this.client.send({ cmd: 'liability.listAppeals' }, {});
+  }
+  
+  createPayment(dto: CreatePaymentDto) {
+    return this.client.send({ cmd: 'liability.createPayment' }, dto);
+  }
+
+  findPaymentsByLiability(liabilityId: number) {
+    return this.client.send({ cmd: 'liability.findPaymentsByLiability' }, { liabilityId });
+  }
+
+  findPayment(id: number) {
+    return this.client.send({ cmd: 'liability.findPayment' }, { id });
+  }
+
+  listPayments() {
+    return this.client.send({ cmd: 'liability.listPayments' }, {});
   }
 }

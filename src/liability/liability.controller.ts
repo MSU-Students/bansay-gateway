@@ -5,6 +5,7 @@ import { UpdateLiabilityDto } from './dto/update-liability.dto';
 import { QueryLiabilityDto } from './dto/query-liability.dto';
 import { CreateAppealDto } from './dto/create-appeal.dto';
 import { ReviewAppealDto } from './dto/review-appeal.dto';
+import { CreatePaymentDto } from './dto/create-payment.dto';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Public } from '../auth/decorators/is-public.decorator';
 
@@ -55,6 +56,18 @@ export class LiabilityController {
   createAppeal(@Param('id', ParseIntPipe) id: number, @Body() dto: CreateAppealDto) {
     return this.liabilityService.createAppeal({ ...dto, liabilityId: id });
   }
+
+  @Post(':id/payments')
+  @ApiOperation({ summary: 'Record a payment for a liability' })
+  createPayment(@Param('id', ParseIntPipe) id: number, @Body() dto: CreatePaymentDto) {
+    return this.liabilityService.createPayment({ ...dto, liabilityId: id });
+  }
+
+  @Get(':id/payments')
+  @ApiOperation({ summary: 'List payments for a liability' })
+  findPaymentsByLiability(@Param('id', ParseIntPipe) id: number) {
+    return this.liabilityService.findPaymentsByLiability(id);
+  }
 }
 
 @ApiTags('Appeal')
@@ -82,5 +95,23 @@ export class AppealController {
   ) {
     const reviewedBy = 1;
     return this.liabilityService.reviewAppeal(id, reviewedBy, dto);
+  }
+}
+
+@ApiTags('Payment')
+@Controller('payments')
+export class PaymentController {
+  constructor(private readonly liabilityService: LiabilityService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'List all payments' })
+  findAll() {
+    return this.liabilityService.listPayments();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a payment by ID' })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.liabilityService.findPayment(id);
   }
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { LiabilityController, AppealController } from './liability.controller';
+import { LiabilityController, AppealController, PaymentController } from './liability.controller';
 import { LiabilityService } from './liability.service';
 
 @Module({
@@ -16,7 +16,7 @@ import { LiabilityService } from './liability.service';
       },
     ]),
   ],
-  controllers: [LiabilityController, AppealController],
+  controllers: [LiabilityController, AppealController, PaymentController],
   providers: [LiabilityService],
 })
 export class LiabilityModule {}
